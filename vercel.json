@@ -1,0 +1,161 @@
+import { Record } from "ts-toolbelt";
+
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvironmentVariables {
+  [key: string]: string | undefined;
+}
+
+interface HeaderRule {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheControl {
+  matchPattern: string;
+  modifiers: { [key: string]: any };
+}
+
+interface FrameworkSettings {
+  vercel?: Record<string, unknown>;
+  netlify?: Record<string, unknown>;
+}
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvironmentVariables;
+  headers: Array<HeaderRule>;
+  cacheControl: CacheControl[];
+  frameworkSettings: FrameworkSettings;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build",
+    output: ".next"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    DATABASE_URL: process.env.DATABASE_URL
+  },
+  headers: [
+    {
+      source: "/(.*)",
+      headers: [
+        { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
+        { key: "X-Content-Type-Options", value: "nosniff" },
+        { key: "X-Frame-Options", value: "DENY" }
+      ]
+    }
+  ],
+  cacheControl: [
+    {
+      matchPattern: "**/*.js",
+      modifiers: { immutable: true, maxAgeSeconds: 31536000 }
+    },
+    {
+      matchPattern: "**/*.css",
+      modifiers: { immutable: true, maxAgeSeconds: 31536000 }
+    },
+    {
+      matchPattern: "images/**",
+      modifiers: { immutable: false, maxAgeSeconds: 86400 }
+    }
+  ],
+  frameworkSettings: {
+    vercel: {
+      buildCommand: "next build",
+      startCommand: "next start"
+    },
+    netlify: {
+      build: {
+        command: "yarn run build",
+        publish: ".out"
+      }
+    }
+  }
+};
+
+import { Record } from "ts-toolbelt";
+
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvironmentVariables {
+  [key: string]: string | undefined;
+}
+
+interface HeaderRule {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheControl {
+  matchPattern: string;
+  modifiers: { [key: string]: any };
+}
+
+interface FrameworkSettings {
+  vercel?: Record<string, unknown>;
+  netlify?: Record<string, unknown>;
+}
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvironmentVariables;
+  headers: Array<HeaderRule>;
+  cacheControl: CacheControl[];
+  frameworkSettings: FrameworkSettings;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build",
+    output: ".next"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    DATABASE_URL: process.env.DATABASE_URL
+  },
+  headers: [
+    {
+      source: "/(.*)",
+      headers: [
+        { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
+        { key: "X-Content-Type-Options", value: "nosniff" },
+        { key: "X-Frame-Options", value: "DENY" }
+      ]
+    }
+  ],
+  cacheControl: [
+    {
+      matchPattern: "**/*.js",
+      modifiers: { immutable: true, maxAgeSeconds: 31536000 }
+    },
+    {
+      matchPattern: "**/*.css",
+      modifiers: { immutable: true, maxAgeSeconds: 31536000 }
+    },
+    {
+      matchPattern: "images/**",
+      modifiers: { immutable: false, maxAgeSeconds: 86400 }
+    }
+  ],
+  frameworkSettings: {
+    vercel: {
+      buildCommand: "next build",
+      startCommand: "next start"
+    },
+    netlify: {
+      build: {
+        command: "yarn run build",
+        publish: ".out"
+      }
+    }
+  }
+};
